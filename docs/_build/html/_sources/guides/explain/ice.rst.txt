@@ -1,0 +1,80 @@
+.. Places parent toc into the sidebar
+
+:parenttoc: True
+
+.. include:: ../../includes/big_toc_css.rst
+
+ICE (Individual Conditional Expectation)  
+==============================================
+
+Individual Conditional Expectation (ICE) plots [Alex2015]_ and PDPs both visualize the relationship between a feature of interest and the predicted response. However, ICE plots focus on the dependence of the predicted response on the feature for each instance, while PDPs show the average effect of the feature on the response across all instances in the dataset.
+
+
+Algorithm Details
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Let :math:`X` represent the set of input features of a predictor function, and :math:`\hat{f}` be a fitted model to be explained. We partition :math:`X` into two sets, i.e., :math:`X_{S}` (features of interest) and its complement :math:`X_{C}`. To be specific, an ICE plot for a feature :math:`x_{S}` and an instance :math:`i` can be defined as:
+
+Let :math:`X` denote the set of input features for a predictor function, and :math:`\hat{f}` be a fitted model that needs to be explained. We partition :math:`X` into two subsets, namely :math:`X_{S}` (the features of interest) and its complement :math:`X_{C}`. Specifically, an ICE plot for a feature :math:`x_{S}` and an instance :math:`i` is defined as follows:
+
+.. math::
+   \begin{align}  
+    \mathrm{ICE}_{S}^{i}(x_{S}) = \hat{f}(x_{S}, x_{C}^{(i)})
+   \end{align}
+
+In PiML, the ICE plot is implemented using the scikit-learn package. For a more detailed analysis of this algorithm, please refer to the documentation available here_.
+
+.. _here: https://scikit-learn.org/stable/auto_examples/inspection/plot_partial_dependence.html 
+
+
+.. note::
+
+   For binary classification tasks, the ICE is computed by default using the predicted probability instead of log odds. In `exp.model_explain`, there exist an argument called `response_method`. If we want to use the predicted probability as the output, we can set `response_method` to "decision_function".
+
+
+Usage
+^^^^^^^^^^^^^^^^^
+
+Below we still use a fitted XGB2 model on the BikeSharing dataset for illustration. The `show` parameter needs to be "global_ice", and the following parameters are also related to ICE plots:
+
+- `uni_feature`: The name of the feature of interest for one-way ICE. 
+- `use_test`: If True, the test data will be used to generate the explanations. Otherwise, the training data will be used. The default value is False.
+- `sample_size`: To speed up the computation, we subsample a subset of the data to calculate ICE. The default value is 2000. To use the full data, you can set `sample_size` to be larger than the number of samples in the data.
+- `grid_size`: The number of grid points in ICE. The default value is 100 for 1D ICE.
+- `response_method`: For binary classification tasks, the ICE is computed by default using the predicted probability instead of log odds; If the model does not have "predict_proba" or we set `response_method` to "decision_function", then the log odds would be used as the response.
+
+The code snippet below provides an example of how to generate an ICE plot using PiML. The `uni_feature` parameter is set to "hr". This configuration will produce a line plot, with each line representing an instance in the dataset. The plot shows how the predicted response varies when the value of "hr" changes, while all other features remain constant. By examining the individual lines in the ICE plot, we can better understand how the model makes predictions for each instance in the dataset. We can also identify any patterns or interactions that may be relevant to our analysis.
+
+.. jupyter-input::
+
+    exp.model_explain(model="XGB2", show="ice", uni_feature="hr", original_scale=True, figsize=(6, 5))
+
+.. figure:: ../../auto_examples/2_explain/images/sphx_glr_plot_2_ice_001.png
+   :target: ../../auto_examples/2_explain/plot_2_ice.html
+   :align: left
+
+From the plot, we observe a similar pattern as the value of `hr` increases for all instances, which is also consistent with the PDP plot generated in the previous section. The predicted values are generally lower when `hr` is less than 4.6. For values of `hr` between 4.6 and 8.3, and between 10 and 18, most of the instances record an increase in prediction as the value of `hr` increases. Apart from that, we also observe that the bandwidth of the predicted response is much larger as `hr` is greater than around 9. This indicates that the rest variables have more contributions to the final prediction during that period of the day.  
+
+
+Examples
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    
+.. topic:: Example 1: Bike Sharing
+
+  The first example below demonstrates how to use PiML with its high-code APIs for developing machine learning models for the BikeSharing data from the UCI repository, which consists of 17,389 samples of hourly counts of rental bikes in Capital bikeshare system; see details. The response `cnt` (hourly bike rental counts) is continuous and it is a regression problem.
+                          
+ * :ref:`sphx_glr_auto_examples_2_explain_plot_2_ice.py`
+
+
+.. topic:: Example 2: SimuCredit
+
+   The second example shows the option to use test set to generate the explanations.
+
+   * :ref:`sphx_glr_auto_examples_2_explain_plot_6_data_dependent_explain.py`
+
+.. topic:: References
+
+     .. [Alex2015] Goldstein, Alex, Adam Kapelner, Justin Bleich, and Emil Pitkin. 
+                `Visualizing statistical learning with plots of individual conditional expectation
+                <https://www.tandfonline.com/doi/abs/10.1080/10618600.2014.907095>`_,
+                Journal of Computational and Graphical Statistics 24, no. 1 (2015): 44-65

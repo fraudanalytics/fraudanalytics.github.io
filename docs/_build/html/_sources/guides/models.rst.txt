@@ -1,0 +1,25 @@
+.. Places parent toc into the sidebar
+
+:parenttoc: True
+
+.. include:: ../includes/big_toc_css.rst
+
+.. _interpretable_ml_models:
+
+Interpretable Models
+--------------------------
+
+.. toctree::
+   :maxdepth: 2
+
+   models/glm.rst
+   models/gam.rst
+   models/tree.rst
+   models/figs.rst
+   models/xgb1.rst
+   models/xgb2.rst
+   models/ebm.rst
+   models/gaminet.rst
+   models/reludnn.rst
+   models/hpo.rst
+	

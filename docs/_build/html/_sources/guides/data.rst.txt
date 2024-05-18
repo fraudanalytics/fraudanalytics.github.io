@@ -1,0 +1,21 @@
+.. Places parent toc into the sidebar
+
+:parenttoc: True
+
+.. include:: ../includes/big_toc_css.rst
+
+
+Data Pipeline
+--------------------------
+
+.. toctree::
+   :maxdepth: 2
+  
+   data/data_load.rst
+   data/data_summary.rst
+   data/data_prepare.rst
+   data/data_eda.rst
+   data/data_quality_integrity.rst
+   data/data_quality_outlier.rst
+   data/data_quality_drift.rst
+   data/feature_select.rst

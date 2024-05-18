@@ -1,0 +1,22 @@
+.. Places parent toc into the sidebar
+
+:parenttoc: True
+
+.. include:: ../includes/big_toc_css.rst
+
+=======================
+Diagnostic Suite
+=======================
+
+.. toctree::
+   :maxdepth: 2
+  
+   testing/accuracy.rst
+   testing/weakspot.rst
+   testing/overfit.rst
+   testing/reliability.rst
+   testing/robustness.rst   
+   testing/resilience.rst   
+   testing/fairness.rst
+   testing/segmented_diagnose.rst
+   testing/scored_test.rst
