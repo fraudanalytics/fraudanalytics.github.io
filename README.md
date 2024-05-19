@@ -1,3 +1,5 @@
+**This is a purely template that will be used for fraud analytics.**
+
 <div align="center">
   
 <img src="https://github.com/SelfExplainML/PiML-Toolbox/blob/main/examples/results/LogoPiML.png" alt="drawing" width="314.15926"/>
